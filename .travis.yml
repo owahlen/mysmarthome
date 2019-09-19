@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+- '8'
+cache:
+  directories:
+  - "$HOME/.local"
+  - node_modules
+before_install:
+- pip install --user awscli
+script: npm run coverage
+after_success: npm run coveralls
+deploy:
+  provider: script
+  script: npm run package && npm run deploy
+  on:
+    branch: master
+  skip_cleanup: true
+notifications:
+  email:
+    on_failure: always
+  pushover:
+    users:
+    - secure: piGOjjEBrmRtcVCpy4kdZAWWzD2LCjwKylNEIPpzF3LKLEaDkYge+zz3AY4fqEaPOZ5RLP+q4Il1k8ZVDqT52lTBJhD5SM7VJVArdQX2u+hsINf/URxHUVNEwznVtMwGMf/xNIr+xqowEpMxXEgNkZw+np1by8YAarUD2gXl8ZvRfwFQT0oXjwhaANWASfLV6z7yQRzCrTTsfxz4sKd6nRzdoIFO3GZO7kxrX2OVzvTWDX4MdQVfLbYECiXh3VDEPbdm2c+15KNJzuFrUKGsQO3HWBCOXjGdFpcdj1jDSYJxuiaNJkY/MdEABLdK9Z1r1P2pU50aoRIu0XIZBmjsOY1S+3TmIGPT9wSQc0ix6iN3g8TZruTXP+aB4frC7wg3/C2/QEVbXzFp2zsF23TgvkEY1b6dVXevMv74RI3Z9JBhMdSHR4WnwuAEUjdZN5d1FVdOzZlBuQg6r3YC22lKiDPeKkDGyGwpYaCcrdqdKiT3qEGfKr0CkGuIwl36EOGxDpvs0/DlLO1nGzZwnSYBS44osl7N21KUszUB2/gW6C/gNvBvbNzVboHPatRRdT1Hx2ZMqeeqL3KgyCpVxUfK0WiaFYz8Cft1OeA1GZh0N3iCSW9wVq6yNPv5uo1i1K7Mv3XmypUauLVZq1Y83cRC+75aANMpBK7JJg4VUBp21CI=
+    api_key:
+      secure: AXGsJvpBUwPcC94OJ0kHHJYHH7lZL9gWpCcHYQB5R6Gr27+OrVEkjUSJV0LP7rX3fZuHcviV76YwJlPw76FBSQw21BgbwYUqa61Jpwn4DbxjZ/amufBw04TuZ6xGYwwkylRQJpS70SME/1Jlv0fIngFp6FLTZ9RygdqJ3d9liULtA9NK385hUT2YWlUhuuUgxrgDYxzfIaXXLYsWLkWji0i9KNDiwZWYBTzCdZ0VnYftdFKQq+Q/XrPWPDYxkl0PqeLuXBZLKJ2IvDAT4/PkaEJH3Y3WG9hN5t6VFI4XQ5pZBp7Nji3SJfhctrJ3nRhvK6j7gB2ReFATcwQJGwUkkqtZx4HDxNS9ae1mNdosHAJVsYlEPWnhxaou94w1Q0nCGqc3eTEQaIY8uyD963iwSITRU5uE/HstIIR9JIyAybuFIqimG826dYZ7+W/nXw7akMuuTR+KUd9BV7dT2tTFhaGKgKp8zYAaD2JmVR1Yg6lAczG7AXRtaMoQPNl7lw7ZcmTb/z4HUr2L8mekX0aEiM2jgSxO19BIfQBKnScxzTjaEd5N+AomE21ouKHvJc8+t2h2suC7ovH5XeIWgcnUsIpH1ooPCKzrFMTOmu0Isw+3ZPIL183Srh2T7GM7KgUlMe9g/5ea7GzfH6DEqw7OJ1TzXh9Xnj2PHQWQ5Z7GtR8=
+    on_success: always
+    on_failure: always

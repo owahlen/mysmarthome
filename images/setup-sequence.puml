@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam padding 4
+
+actor "User" as user
+participant "Alexa\lApp" as app
+participant "Alexa\lService" as alexa_service
+participant "Login with\lAmazon" as lwa
+participant "Skill\lLambda" as lambda
+
+== Device Setup ==
+user -> app: activate skill\l"mysmarthome"
+app -> alexa_service
+alexa_service -> app: request\laccount linking
+app -> user
+user -> app: authenticate
+app -> lwa
+lwa -> alexa_service: link accounts
+alexa_service -> app
+app -> user: ask user to start\ldevice discovery
+user -> app: request\ldevice discovery
+app -> alexa_service
+alexa_service -> lambda: Discover directive
+lambda -->: lookup\ldevices
+lambda <--
+lambda -> alexa_service: Discover.Response event
+alexa_service -> app
+app -> user: show TV device\lin device list
+
+
+@enduml

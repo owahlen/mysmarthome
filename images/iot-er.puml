@@ -1,0 +1,49 @@
+@startuml
+skinparam monochrome true
+skinparam padding 4
+hide circle
+hide methods
+
+package "AWS Account" {
+
+    entity "Thing" as thing {
+        * name (//RaspberryPi//)
+        * ARN
+    }
+    note right: Thing instance represents the\nphysical device in the cloud.
+
+    entity "Certificate" as certificate {
+        * name (//1471cfc859...//)
+        * ARN
+    }
+    note right: Represents the certificate\nfiles deployed on the device.\nThose are used for authentication\nagainst AWS IoT.
+
+    entity "Policy" as policy {
+        * name (//RaspberryPi//)
+        * ARN
+        * Policy document (JSON)
+    }
+    note right: Defines which operations or\nresources a device or user can access.
+
+    entity "MQTT Broker" as broker {
+        * topics
+    }
+
+}
+
+entity "Physical Device" as device {
+        .. Files ..
+        + certificate (//1471cfc859-certificate.pem.crt//)
+        + public key (//1471cfc859-public.pem.key//)
+        + private key (//1471cfc859-private.pem.key//)
+        + certificate authority (//AmazonRootCA1.pem//)
+}
+
+thing }--{ certificate
+certificate }--{ policy
+device -- thing
+certificate ..> device: copy\lfiles
+device <--> broker: Pub/Sub
+
+
+@enduml

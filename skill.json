@@ -1,0 +1,26 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "Control home devices with Alexa and a Raspberry Pi",
+          "examplePhrases": [],
+          "name": "mysmarthome",
+          "description": "Integrate Amazon Alexa with a Raspberry Pi to control home devices."
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "",
+      "category": "EDUCATION_AND_REFERENCE",
+      "distributionCountries": []
+    },
+    "apis": {
+      "smartHome": {
+        "endpoint": {
+          "sourceDir": "dist"
+        }
+      }
+    },
+    "manifestVersion": "1.0"
+  }
+}

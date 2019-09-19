@@ -1,0 +1,62 @@
+@startuml
+skinparam monochrome true
+skinparam padding 4
+
+actor "User" as user
+participant "Alexa\lDevice" as echo
+participant "Alexa\lService" as alexa_service
+participant "Skill\lLambda" as lambda
+participant "IoT\lCore" as iot
+participant "Node\lRED" as node_red
+participant "TV" as tv
+
+== Initialization of Communication ==
+node_red -> iot: connect
+note left
+    Raspberry Pi located in home network
+    starts the communication into the cloud
+    using MQTT protocol secured by certificates
+end note
+iot -> node_red
+node_red -> iot: subscribe to topic:\l//mysmarthome/request/+//
+iot -> node_red
+
+== Control of Device via Voice ==
+user -> echo: Alexa, lower\lthe volume\lon Philips TV
+echo -> alexa_service
+alexa_service -> lambda: //AdjustVolume//\ldirective of\l//Alexa.StepSpeaker//\lInterface
+
+group if //Skill Lambda// is cold
+lambda -> iot: connect
+note right
+    Connection to IoT Core
+    using //aws-iot-device-sdk//
+    with //WSS// protocol
+    secured by //IAM//
+end note
+iot -> lambda
+lambda -> iot: subscribe to response topics\l//mysmarthome/response/+//
+iot -> lambda
+end
+lambda -> iot: publish on request topic\l//mysmarthome/request/<uuid>//:\l//["VolumeDown","VolumeDown"]//
+note right
+    Each request generates
+    a random <uuid>.
+end note
+iot -> node_red: broadcast request message
+node_red -> tv: post\l//{"key": "VolumeDown"}//
+tv -> node_red: HTTP status code //200//
+node_red -> node_red: wait 250ms
+note left
+    rate limit of the
+    communication
+    with the TV
+end note
+node_red -> tv: post\l//{"key": "VolumeDown"}//
+tv -> node_red: HTTP status code //200//
+node_red -> iot: publish on response topic\l//mysmarthome/response/<uuid>//:\l{"status":"OK"}
+iot -> lambda: broadcast response message
+lambda -> alexa_service: //Response// event
+alexa_service -> echo
+echo -> user: confirmation\lbeep
+@enduml

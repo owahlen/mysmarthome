@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: MySmartHome Lambda Endpoint
+
+Mappings:
+  Variables:
+    AlexaSkillKit:
+      Id: amzn1.ask.skill.01f7ec8f-a1ca-49fc-8a3e-ec3de102174b
+
+Resources:
+  MySmartHomeSkill:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/index.handler
+      Runtime: nodejs8.10
+      Timeout: 10
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - iot:Publish
+                - iot:Receive
+              Resource: !Sub 'arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topic/mysmarthome/*'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - iot:Subscribe
+              Resource: !Sub 'arn:aws:iot:${AWS::Region}:${AWS::AccountId}:topicfilter/mysmarthome/*'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - iot:Connect
+              Resource: !Sub 'arn:aws:iot:${AWS::Region}:${AWS::AccountId}:client/*'
+
+  MySmartHomeAskPermission:
+    Type: AWS::Lambda::Permission
+    DependsOn: MySmartHomeSkill
+    Properties:
+      Action: lambda:InvokeFunction
+      EventSourceToken: !FindInMap
+        - Variables
+        - AlexaSkillKit
+        - Id
+      FunctionName: !GetAtt MySmartHomeSkill.Arn
+      Principal: alexa-connectedhome.amazon.com
+
+Outputs:
+  MySmartHomeSkillArn:
+    Description: "MySmartHomeSkill ARN"
+    Value: !GetAtt MySmartHomeSkill.Arn
+    Export: {
+      Name: !Sub '${AWS::StackName}:MySmartHomeSkill:Arn'
+    }
+
+  MySmartHomeSkillIamRole:
+    Description: "Implicit IAM Role created for MySmartHomeSkill"
+    Value: !GetAtt MySmartHomeSkillRole.Arn
+    Export: {
+      Name: !Sub '${AWS::StackName}:MySmartHomeSkillRole:Arn'
+    }
+
+  MySmartHomeSkillAlexaSkillKitId:
+    Description: "Alexa Skill Permitted Lambda Invokation Permissions"
+    Value: !FindInMap
+      - Variables
+      - AlexaSkillKit
+      - Id

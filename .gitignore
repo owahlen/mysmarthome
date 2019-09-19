@@ -1,0 +1,28 @@
+# Generated files
+dist/
+package.yml
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage
+.nyc_output/
+coverage/
+*.lcov
+
+# IDE or editors
+.idea/
+*.iml
+*.iws
+*~
+
+# Mac
+*.DS_Store

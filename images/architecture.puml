@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam componentStyle uml2
+skinparam padding 4
+
+actor "User" as user
+
+package "Home Network" as home {
+  node "Alexa Device\l(e.g. Echo)" as echo #white
+  node "Raspberry Pi" as pi #white {
+    [Node RED] as node_red
+  }
+  node "TV" as tv #white
+}
+
+cloud "AWS Cloud" {
+  [Alexa Service] as alexa_service
+  [Skill Lambda] as lambda
+  [IoT Core] as iot
+}
+
+user -[hidden]-> home
+pi -[hidden]-> tv
+user <-right-> echo : talks\lto
+echo <-right-> alexa_service: transmits\lvoice\ldata
+alexa_service -right-> lambda: function\lcall
+lambda -right-> iot: MQTT\lPub/Sub
+iot <-down-> node_red: MQTT\lPub/Sub
+node_red -right-> tv: REST\lcalls
+
+@enduml
