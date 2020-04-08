@@ -73,7 +73,7 @@ the semantics of _request/response_ must be mapped onto a _pub/sub_ system.
 As shown in the communication flow, this creates some complexity managing subscribing and publishing
 to _request topics_ and to _response topics_, each unique for every Lambda function call.
 Note that the functionality is contained in the
-[RequestResponseProtocol](https://github.com/owahlen/mysmarthome/blob/master/src/iot/RequestResponseProtocol.ts)
+[IotTransceiver](https://github.com/owahlen/mysmarthome/blob/master/src/iot/RequestResponseProtocol.ts)
 class of this project.
 
 #### Pub/Sub inside the Lambda
@@ -159,7 +159,7 @@ After clicking _Save_, make sure you write down the _Client ID_ and the _Client-
 ### Create the Lambda for the Skill
 * Open the file `template.yml` and insert the _Skill ID_ into the _AlexaSkillKit -> Id_
   entry at the top of the file.
-* Open the file `src/iot/iot.ts` and change the variable `iotEndpoint` to the
+* Open the file `src/iot/IotTransceiverFactory.ts` and change the variable `iotEndpoint` to the
   _Endpoint_ noted down before when setting up IoT 
 
 ### Create S3 bucket to store the Lambda sourcecode
@@ -280,3 +280,15 @@ to simulate an incoming MQTT message from the cloud.
 In the [Alexa developer console](https://developer.amazon.com/alexa/console/ask)
 select _mysmarthome skill_ -> _Test_ -> _Alexa Simulator_.
 In the text field it is possible to type utterances and see/hear the results from Alexa.
+
+# LIRC
+irrecord -d /dev/ttyACM0 TZ_602.conf
+in /etc/lirc/lircd.conf: /etc/lirc/lircd.conf.d/gutmann/TZ_602
+dmesg -Tw
+/usr/local/sbin/lircd --device=/dev/ttyACM0 --listen=8765
+irsend --address=localhost:8765 SEND_ONCE TZ_602_2 KEY_BRIGHTNESS_CYCLE
+
+# Business Objects
+Problem: several devices to be addressed
+Have one _mysmarthome skill_ that addresses n devices which in turn are driven by
+m Raspberry PIs (m<n).

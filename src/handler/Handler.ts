@@ -1,5 +1,5 @@
 import {AlexaResponse} from "./AlexaResponse";
-import {logger} from "../logger";
+import {logger} from "../utils/logger";
 
 export interface Handler {
     canHandle(event: any, context: any): boolean;

@@ -1,4 +1,4 @@
 export interface IotResponse {
-    requestId: string;
+    endpointId: string;
     payload: any;
 }

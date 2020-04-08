@@ -1,6 +1,6 @@
 import {Handler} from "./Handler";
 import {AlexaResponse} from "./AlexaResponse";
-import {logger} from "../logger";
+import {logger} from "../utils/logger";
 
 export class HandlerBuilder {
 

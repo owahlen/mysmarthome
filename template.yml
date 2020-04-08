@@ -14,6 +14,10 @@ Resources:
       Handler: dist/index.handler
       Runtime: nodejs8.10
       Timeout: 10
+      Environment:
+        Variables:
+          iotEndpoint: a1r5gapbm9ij1g-ats.iot.eu-west-1.amazonaws.com
+          baseTopic: mysmarthome
       Policies:
         - Statement:
             - Effect: Allow

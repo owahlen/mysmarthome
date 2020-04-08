@@ -5,7 +5,7 @@ import {authorizationHandler} from "./handler/AuthorizationHandler";
 import {discoveryHandler} from "./handler/DiscoveryHandler";
 import {powerControllerHandler} from "./handler/PowerControllerHandler";
 import {fallThroughHandler} from "./handler/FallThroughHandler";
-import {logger} from "./logger";
+import {logger} from "./utils/logger";
 import {stepSpeakerHandler} from "./handler/StepSpeakerHandler";
 import {channelControllerHandler} from "./handler/ChannelControllerHandler";
 

@@ -1,7 +1,5 @@
 import {getNamespace, Handler, resolveResponse} from "./Handler";
 import {AlexaResponse} from "./AlexaResponse";
-import {Key} from "../key";
-import {publishKey, publishKeys} from "../iot/iot";
 
 export const DEFAULT_STEP_WIDTH = 5;
 
@@ -35,13 +33,13 @@ class StepSpeakerHandler implements Handler {
                 event.directive.payload.volumeSteps,
                 event.directive.payload.volumeStepsDefault
             );
-            const keys = new Array<Key>(Math.abs(volumeSteps));
-            if (volumeSteps < 0) keys.fill(Key.VolumeDown);
-            else keys.fill(Key.VolumeUp);
-            await publishKeys(keys);
+            //const keys = new Array<Key>(Math.abs(volumeSteps));
+            //if (volumeSteps < 0) keys.fill(Key.VolumeDown);
+            //else keys.fill(Key.VolumeUp);
+            //await publishKeys(keys);
         } else if (event.directive.header.name === "SetMute") {
             const mute = event.directive.payload.mute;
-            await publishKey(Key.Mute);
+            //await publishKey(Key.Mute);
         }
         alexaResponse.addContextProperty({});
 
