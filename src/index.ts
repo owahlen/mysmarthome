@@ -1,14 +1,10 @@
 import * as AWS from "aws-sdk";
 import {handlerBuilder} from "./handler/HandlerBuilder";
-import {validationHandler} from "./handler/ValidationHandler";
-import {authorizationHandler} from "./handler/AuthorizationHandler";
 import {discoveryHandler} from "./handler/DiscoveryHandler";
-import {powerControllerHandler} from "./handler/PowerControllerHandler";
-import {fallThroughHandler} from "./handler/FallThroughHandler";
 import {logger} from "./utils/logger";
-import {stepSpeakerHandler} from "./handler/StepSpeakerHandler";
-import {channelControllerHandler} from "./handler/ChannelControllerHandler";
 import {AlexaResponse} from "./alexa/AlexaResponse";
+import {bidirectionalHandler} from "./handler/BidirectionalHandler";
+import {unidirectionalHandler} from "./handler/UnidirectionalHandler";
 
 AWS.config.update({region: 'eu-west-1'});
 
@@ -26,13 +22,9 @@ export const handler = async (event: any, context: any): Promise<AlexaResponse> 
     }
 
     return handlerBuilder()
-        .add(validationHandler())
-        .add(authorizationHandler())
+        .add(bidirectionalHandler())
         .add(discoveryHandler())
-        .add(channelControllerHandler())
-        .add(powerControllerHandler())
-        .add(stepSpeakerHandler())
-        .add(fallThroughHandler())
+        .add(unidirectionalHandler())
         .build()
         (event, context);
 };

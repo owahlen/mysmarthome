@@ -15,13 +15,9 @@ chaiUse(chaiString);
 describe('index', () => {
 
     const handlerModuleNames: Array<string> = [
-        'ValidationHandler',
-        'AuthorizationHandler',
+        'BidirectionalHandler',
         'DiscoveryHandler',
-        'ChannelControllerHandler',
-        'PowerControllerHandler',
-        'StepSpeakerHandler',
-        'FallThroughHandler'
+        'UnidirectionalHandler'
     ];
 
     // import Handlers
@@ -54,7 +50,7 @@ describe('index', () => {
             const handlerFake: Handler = {
                 canHandle: sinon.fake(),
                 handle: sinon.fake()
-            };
+            } as unknown as Handler;
             sandbox.stub(module, handlerNames[index]).callsFake(() => handlerFake);
             return handlerFake;
         });
@@ -71,7 +67,7 @@ describe('index', () => {
         await handler({}, {});
         // then
         expect(handlerBuilderStubInstance.add).to.have.been.callCount(handlerNames.length);
-        handlerFakes.forEach((handlerFake, index)=>{
+        handlerFakes.forEach((handlerFake, index) => {
             expect(handlerBuilderStubInstance.add.getCall(index).args[0]).to.equal(handlerFake);
         });
 

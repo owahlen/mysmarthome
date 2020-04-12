@@ -14,7 +14,7 @@ describe('DiscoveryHandler', () => {
 
     it('should be able to handle Discovery.request', () => {
         // setup
-        const event = loadJson('test/requests/Discovery.request.json');
+        const event = loadJson('test/events/Discovery.request.json');
         // when
         let canHandle = discoveryHandler().canHandle(event, undefined);
         // then
@@ -24,7 +24,7 @@ describe('DiscoveryHandler', () => {
 
     it('should return Discovery.response on Discovery.request', async () => {
         // setup
-        const event = loadJson('test/requests/Discovery.request.json');
+        const event = loadJson('test/events/Discovery.request.json');
         const iotTransceiverStub = getIotTransceiver() as unknown as SinonStubbedInstance<IotTransceiver>;
         iotTransceiverStub.get.returns(
             Promise.resolve([{

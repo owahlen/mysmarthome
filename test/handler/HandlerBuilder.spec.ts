@@ -9,7 +9,7 @@ import {consoleTransport} from "../../src/utils/logger";
 
 chaiUse(sinonChai);
 
-describe('handlerBuilder', () => {
+describe('HandlerBuilder', () => {
 
     const sandbox = sinon.createSandbox();
     let handlers: Array<Handler>;
@@ -20,10 +20,10 @@ describe('handlerBuilder', () => {
         handlers = [{
             canHandle: sandbox.stub(),
             handle: sandbox.stub()
-        }, {
+        } as unknown as Handler, {
             canHandle: sandbox.stub(),
             handle: sandbox.stub()
-        }];
+        } as unknown as Handler];
     });
 
     afterEach(function () {
@@ -50,7 +50,7 @@ describe('handlerBuilder', () => {
         expect(handlers[0].handle).to.have.not.been.called;
         expect(handlers[1].canHandle).to.have.been.calledOnce;
         expect(handlers[1].handle).to.have.not.been.called;
-        expect(handlerPromise).to.be.rejectedWith("unable to handle event");
+        return expect(handlerPromise).to.be.rejectedWith("unable to handle event");
     });
 
     it('should call handle only on first handler if canHandle is true for all handlers', async () => {

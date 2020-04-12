@@ -27,11 +27,11 @@ const stubIotTransmitter = () => {
 }
 
 const stubIotTransceiver = () => {
-    const iotResponseStub: IotResponse = {
+    const testIotResponse: IotResponse = {
         endpointId: "testEndpointId",
         payload: {}
     }
     const iotTransceiverStub = sinon.createStubInstance(IotTransceiver);
-    iotTransceiverStub.get.returns(Promise.resolve([iotResponseStub]));
+    iotTransceiverStub.get.returns(Promise.resolve([testIotResponse]));
     volatileRadioMap.set(TRANSCEIVER, iotTransceiverStub as unknown as IotRadio);
 }

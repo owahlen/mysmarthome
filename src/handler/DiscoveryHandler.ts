@@ -1,4 +1,4 @@
-import {getNamespace, Handler, resolveResponse} from "./Handler";
+import {Handler} from "./Handler";
 import {AlexaResponse} from "../alexa/AlexaResponse";
 import {getIotTransceiver} from "../iot/IotRadioFactory";
 import {IotRequest} from "../iot/IotRequest";
@@ -6,9 +6,9 @@ import {IotResponse} from "../iot/IotResponse";
 import {AlexaEndpoint} from "../alexa/AlexaEndpoint";
 
 
-class DiscoveryHandler implements Handler {
+class DiscoveryHandler extends Handler {
     canHandle(event: any, context: any): boolean {
-        return getNamespace(event) === 'Alexa.Discovery';
+        return this.getNamespace(event) === 'Alexa.Discovery';
     }
 
     async handle(event: any, context: any): Promise<AlexaResponse> {
@@ -28,7 +28,7 @@ class DiscoveryHandler implements Handler {
             const alexaEndpoint: AlexaEndpoint = iotResponse.payload;
             alexaResponse.addPayloadEndpoint(alexaEndpoint);
         });
-        return resolveResponse(alexaResponse);
+        return this.resolveResponse(alexaResponse);
     }
 }
 
