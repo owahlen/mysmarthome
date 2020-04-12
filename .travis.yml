@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-- '8'
+- '12'
 cache:
   directories:
   - "$HOME/.local"
   - node_modules
 before_install:
-- pip install --user awscli
+- pip3 install --user awscli
 script: npm run coverage
 after_success: npm run coveralls
 deploy:
