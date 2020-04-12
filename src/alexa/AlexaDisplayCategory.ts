@@ -1,0 +1,35 @@
+export type AlexaDisplayCategory =
+    "ACTIVITY_TRIGGER" |
+    "CAMERA" |
+    "COMPUTER" |
+    "CONTACT_SENSOR" |
+    "DOOR" |
+    "DOORBELL" |
+    "EXTERIOR_BLIND" |
+    "FAN" |
+    "GAME_CONSOLE" |
+    "GARAGE_DOOR" |
+    "INTERIOR_BLIND" |
+    "LAPTOP" |
+    "LIGHT" |
+    "MICROWAVE" |
+    "MOBILE_PHONE" |
+    "MOTION_SENSOR" |
+    "MUSIC_SYSTEM" |
+    "NETWORK_HARDWARE" |
+    "OTHER" |
+    "OVEN" |
+    "PHONE" |
+    "SCENE_TRIGGER" |
+    "SCREEN" |
+    "SECURITY_PANEL" |
+    "SMARTLOCK" |
+    "SMARTPLUG" |
+    "SPEAKER" |
+    "STREAMING_DEVICE" |
+    "SWITCH" |
+    "TABLET" |
+    "TEMPERATURE_SENSOR" |
+    "THERMOSTAT" |
+    "TV" |
+    "WEARABLE"

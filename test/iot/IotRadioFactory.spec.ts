@@ -11,6 +11,7 @@ import {
 } from "../../src/iot/IotRadioFactory";
 import {IotTransmitter} from "../../src/iot/IotTransmitter";
 import {IotTransceiver} from "../../src/iot/IotTransceiver";
+import {consoleTransport} from "../../src/utils/logger";
 
 describe('IotRadioFactory', () => {
 
@@ -45,9 +46,13 @@ describe('IotRadioFactory', () => {
         const iotRadio = getIotTransceiver();
         // then
         expect(iotRadio).to.be.an.instanceOf(IotTransceiver);
-        iotRadio.end(true); // important to avoid test hangup
         expect(iotRadio.endpoint).to.equal(endpoint);
         expect(iotRadio.baseTopic).to.equal(baseTopic);
+        // turn down iotRadio silently to avoid test hangup
+        consoleTransport.silent = true;
+        iotRadio.end(true, () => {
+            consoleTransport.silent = false;
+        });
     });
 
     it('should close all IotRadios', () => {

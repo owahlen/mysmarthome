@@ -1,18 +1,21 @@
 /**
  * Interface for the Alexa capability object schema:
  * @see https://developer.amazon.com/de-DE/docs/alexa/device-apis/alexa-discovery.html#capability-object
-*/
+ */
+import {AlexaCapabilityType} from "./AlexaCapabilityType";
+import {AlexaCapabilityInterface} from "./AlexaCapabilityInterface";
+
 export interface AlexaCapability {
-    type: string,
-    interface: string,
+    type: AlexaCapabilityType,
+    interface: AlexaCapabilityInterface,
     instance?: string,
     version: string,
     properties: {
-        supported?: Array<Object>,
+        supported?: Array<any>,
         proactivelyReported?: boolean
         retrievable?: boolean
     },
-    capabilityResources?: Object,
-    configuration?: Object,
-    semantics?: Object
+    capabilityResources?: any,
+    configuration?: any,
+    semantics?: any
 }

@@ -12,17 +12,18 @@ class DiscoveryHandler implements Handler {
     }
 
     async handle(event: any, context: any): Promise<AlexaResponse> {
-        const alexaResponse = new AlexaResponse({
-                "namespace": "Alexa.Discovery",
-                "name": "Discover.Response"
-            }
-        );
         const iotRequest: IotRequest = {
             // endpointId is not defined -> broadcast
             payload: {event}
         }
         const iotTransceiver = getIotTransceiver();
         const iotResponses: Array<IotResponse> = await iotTransceiver.get(iotRequest);
+
+        const alexaResponse = new AlexaResponse({
+                namespace: "Alexa.Discovery",
+                name: "Discover.Response"
+            }
+        );
         iotResponses.forEach((iotResponse) => {
             const alexaEndpoint: AlexaEndpoint = iotResponse.payload;
             alexaResponse.addPayloadEndpoint(alexaEndpoint);

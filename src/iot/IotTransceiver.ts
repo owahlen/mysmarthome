@@ -111,9 +111,10 @@ export class IotTransceiver extends IotRadio {
     /**
      * Close the transceiver and any underlying connections
      * @param force passing it to true will close the client right away, without waiting for the in-flight messages to be acked.
+     * @param callback
      */
-    end(force?: boolean) {
-        this.device.end(force);
+    end(force?: boolean, callback?: Function) {
+        this.device.end(force, callback);
     }
 
     /**

@@ -2,8 +2,8 @@ import {expect, use as chaiUse} from "chai";
 import * as sinonChai from "sinon-chai";
 import {IotTransceiver} from "../../src/iot/IotTransceiver";
 import * as uuid from "uuid";
-import * as sinon from "sinon";
 import {v4} from "uuid";
+import * as sinon from "sinon";
 import * as awsIot from "aws-iot-device-sdk";
 import {deviceFake} from "./deviceFake";
 import * as chaiAsPromised from "chai-as-promised";
@@ -45,8 +45,18 @@ describe('IotTransceiver', () => {
 
     it('should resolve for single endpointId if response status is OK', async () => {
         // setup
-        const iotRequest: IotRequest = {endpointId:endpointId, payload: ["VolumeUp", "VolumeDown"]};
-        const iotResponse: IotResponse = {endpointId:endpointId, payload : {"status": "OK"}};
+        const iotRequest: IotRequest = {
+            endpointId,
+            payload: {
+                testRequestPayloadItem: "foo"
+            }
+        };
+        const iotResponse: IotResponse = {
+            endpointId,
+            payload: {
+                testResponsePayloadItem: "bar"
+            }
+        };
         const iotTransceiver = new IotTransceiver(iotEndpoint, baseTopic);
         // when
         const iotResponsesPromise = iotTransceiver.get(iotRequest);
@@ -58,20 +68,28 @@ describe('IotTransceiver', () => {
         expect(iotResponseResult.endpointId).to.equal(endpointId);
         expect(iotResponseResult.payload).to.deep.equal(iotResponse.payload);
         iotTransceiver.end();
-    }).timeout(10000);
+    });
 
-    it('should reject for single endpointId if response status is not OK', () => {
+    it('should reject for single endpointId if response has error', () => {
         // setup
-        const RESPONSE_STATUS = "EHOSTUNREACH";
-        const iotRequest: IotRequest = {endpointId:endpointId, payload: ["VolumeUp", "VolumeDown"]};
-        const iotResponse: IotResponse = {endpointId:endpointId, payload : {"status": RESPONSE_STATUS}};
+        const iotRequest: IotRequest = {
+            endpointId,
+            payload: {
+                testRequestPayloadItem: "foo"
+            }
+        };
+        const iotResponse: IotResponse = {
+            endpointId,
+            payload: {testResponsePayloadItem: "bar"},
+            error: "testError"
+        };
         const iotTransceiver = new IotTransceiver(iotEndpoint, baseTopic);
         // when
         const iotResponsesPromise = iotTransceiver.get(iotRequest);
         device.publish(responseTopic, JSON.stringify(iotResponse));
         // then
-        expect(iotResponsesPromise).to.be.rejectedWith("EHOSTUNREACH");
         iotTransceiver.end();
-    }).timeout(10000);
+        return expect(iotResponsesPromise).to.be.rejectedWith("testError");
+    });
 
 });

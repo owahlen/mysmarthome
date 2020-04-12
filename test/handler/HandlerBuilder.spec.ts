@@ -5,6 +5,7 @@ import * as sinonChai from 'sinon-chai'
 import {handlerBuilder} from "../../src/handler/HandlerBuilder";
 import {AlexaResponse} from "../../src/alexa/AlexaResponse";
 import {Handler} from "../../src/handler/Handler";
+import {consoleTransport} from "../../src/utils/logger";
 
 chaiUse(sinonChai);
 
@@ -14,6 +15,8 @@ describe('handlerBuilder', () => {
     let handlers: Array<Handler>;
 
     beforeEach(function () {
+        // avoid expected error in test logs:
+        consoleTransport.silent = true;
         handlers = [{
             canHandle: sandbox.stub(),
             handle: sandbox.stub()
@@ -24,10 +27,11 @@ describe('handlerBuilder', () => {
     });
 
     afterEach(function () {
+        consoleTransport.silent = false;
         sandbox.restore();
     });
 
-    it('should call canHandle of all added handlers if none answers with true', async () => {
+    it('should call canHandle of all added handlers if none answers with true', () => {
         // setup
         handlers.forEach((handler) => {
             handler.canHandle = sinon.fake.returns(false);
