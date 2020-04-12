@@ -14,7 +14,7 @@ class DiscoveryHandler extends Handler {
     async handle(event: any, context: any): Promise<AlexaResponse> {
         const iotRequest: IotRequest = {
             // endpointId is not defined -> broadcast
-            payload: {event}
+            payload: {directive: event.directive}
         }
         const iotTransceiver = getIotTransceiver();
         const iotResponses: Array<IotResponse> = await iotTransceiver.get(iotRequest);
