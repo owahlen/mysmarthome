@@ -7,6 +7,10 @@ cache:
   - node_modules
 before_install:
 - pip3 install --user awscli
+addons:
+  apt:
+    packages:
+      - python3-pip
 script: npm run coverage
 after_success: npm run coveralls
 deploy:
