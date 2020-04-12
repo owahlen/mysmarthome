@@ -6,11 +6,9 @@ cache:
   - "$HOME/.local"
   - node_modules
 before_install:
-- pip3 install --user awscli
-addons:
-  apt:
-    packages:
-      - python3-pip
+- pyenv global 3.7.1
+- pip install -U pip
+- pip install awscli
 script: npm run coverage
 after_success: npm run coveralls
 deploy:
