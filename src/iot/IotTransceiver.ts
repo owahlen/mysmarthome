@@ -73,7 +73,7 @@ export class IotTransceiver extends IotRadio {
                 // this function is called everytime a response is received from any endpoint
                 logger.info("received response from endpoint '" + iotResponse.endpointId +
                     "' on topic '" + topic + "': " + JSON.stringify(iotResponse.payload));
-                if (iotResponse.payload.status === "OK") {
+                if (iotResponse.error === undefined) {
                     responses.push(iotResponse);
                     if (iotRequest.endpointId) {
                         // a successful response has arrived from the addressed endpoint.
@@ -83,7 +83,7 @@ export class IotTransceiver extends IotRadio {
                     }
                 } else {
                     const errorMessage = "endpoint '" + iotResponse.endpointId +
-                        "' has returned status: " + iotResponse.payload.status;
+                        "' has returned error: " + iotResponse.error;
                     logger.warn(errorMessage);
                     this.subscribers.delete(requestId);
                     reject(Error(errorMessage));

@@ -3,7 +3,7 @@ import * as sinon from 'sinon';
 import 'mocha';
 import * as sinonChai from 'sinon-chai'
 import {handlerBuilder} from "../../src/handler/HandlerBuilder";
-import {AlexaResponse} from "../../src/handler/AlexaResponse";
+import {AlexaResponse} from "../../src/alexa/AlexaResponse";
 import {Handler} from "../../src/handler/Handler";
 
 chaiUse(sinonChai);

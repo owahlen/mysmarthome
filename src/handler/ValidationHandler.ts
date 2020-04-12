@@ -1,5 +1,5 @@
 import {Handler, resolveResponse} from "./Handler";
-import {AlexaResponse} from "./AlexaResponse";
+import {AlexaResponse} from "../alexa/AlexaResponse";
 
 class ValidationHandler implements Handler {
     canHandle(event: any, context: any): boolean {

@@ -1,4 +1,4 @@
-import {AlexaResponse} from "./AlexaResponse";
+import {AlexaResponse} from "../alexa/AlexaResponse";
 import {logger} from "../utils/logger";
 
 export interface Handler {

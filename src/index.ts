@@ -8,10 +8,11 @@ import {fallThroughHandler} from "./handler/FallThroughHandler";
 import {logger} from "./utils/logger";
 import {stepSpeakerHandler} from "./handler/StepSpeakerHandler";
 import {channelControllerHandler} from "./handler/ChannelControllerHandler";
+import {AlexaResponse} from "./alexa/AlexaResponse";
 
 AWS.config.update({region: 'eu-west-1'});
 
-export const handler = async (event: any, context: any) => {
+export const handler = async (event: any, context: any): Promise<AlexaResponse> => {
 
     // Dump the event and context for logging to CloudWatch
     logger.info("----- event -----");

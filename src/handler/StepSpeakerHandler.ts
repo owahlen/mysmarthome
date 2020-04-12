@@ -1,5 +1,5 @@
 import {getNamespace, Handler, resolveResponse} from "./Handler";
-import {AlexaResponse} from "./AlexaResponse";
+import {AlexaResponse} from "../alexa/AlexaResponse";
 
 export const DEFAULT_STEP_WIDTH = 5;
 

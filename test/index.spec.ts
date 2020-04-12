@@ -7,7 +7,7 @@ import {Handler} from "../src/handler/Handler";
 import {handler} from '../src';
 import * as hb from "../src/handler/HandlerBuilder";
 import {handlerBuilder} from "../src/handler/HandlerBuilder";
-import {AlexaResponse} from "../src/handler/AlexaResponse";
+import {AlexaResponse} from "../src/alexa/AlexaResponse";
 
 chaiUse(sinonChai);
 chaiUse(chaiString);

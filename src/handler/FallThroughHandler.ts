@@ -1,5 +1,5 @@
 import {getNamespace, Handler, resolveResponse} from "./Handler";
-import {AlexaResponse} from "./AlexaResponse";
+import {AlexaResponse} from "../alexa/AlexaResponse";
 
 class FallThroughHandler implements Handler {
     canHandle(event: any, context: any): boolean {
