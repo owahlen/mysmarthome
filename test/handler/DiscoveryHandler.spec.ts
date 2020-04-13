@@ -28,8 +28,8 @@ describe('DiscoveryHandler', () => {
         const iotTransceiverStub = getIotTransceiver() as unknown as SinonStubbedInstance<IotTransceiver>;
         iotTransceiverStub.get.returns(
             Promise.resolve([{
-                endpointId: "testEndpointId",
-                payload: alexaEndpoint
+                iotEndpointId: "testIotEndpointId",
+                payload: {endpoints: [alexaEndpoint]}
             }]));
 
         // when
@@ -39,8 +39,7 @@ describe('DiscoveryHandler', () => {
         expect(result.event.header.name).to.equal('Discover.Response');
         expect(result.event.payload.endpoints).to.have.lengthOf(1);
     });
-
-
+    
     const alexaEndpoint: AlexaEndpoint = {
         endpointId: 'raspberrypi001',
         manufacturerName: 'Gutmann',

@@ -26,9 +26,13 @@ class DiscoveryHandler extends Handler {
                     name: "Discover.Response"
                 }
             );
+            // collect the responses from all iot hubs
             iotResponses.forEach((iotResponse) => {
-                const alexaEndpoint: AlexaEndpoint = iotResponse.payload;
-                alexaResponse.addPayloadEndpoint(alexaEndpoint);
+                // collect the endpoints from each hub
+                const alexaEndpoints: Array<AlexaEndpoint> = iotResponse.payload.endpoints;
+                alexaEndpoints.forEach((alexaEndpoint)=>{
+                    alexaResponse.addPayloadEndpoint(alexaEndpoint);
+                });
             });
             logger.info("----- response -----");
             logger.info(JSON.stringify(alexaResponse));

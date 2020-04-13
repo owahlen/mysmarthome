@@ -6,6 +6,7 @@ import {bidirectionalHandler} from "../../src/handler/BidirectionalHandler";
 import {getIotTransceiver} from "../../src/iot/IotRadioFactory";
 import {SinonStubbedInstance} from "sinon";
 import {IotTransceiver} from "../../src/iot/IotTransceiver";
+import {IotResponse} from "../../src/iot/IotResponse";
 
 chaiUse(sinonChai);
 
@@ -33,8 +34,8 @@ describe('BidirectionalHandler', () => {
     it('should publish response from iot', async () => {
         // setup
         const event = loadJson('test/events/PowerController.TurnOn.request.json');
-        const iotResponse = {
-            endpointId: event.directive.endpoint.endpointId,
+        const iotResponse:IotResponse = {
+            iotEndpointId: 'testIotEndpointId',
             payload: loadJson('test/events/PowerController.TurnOn.response.json')
         }
         const iotTransceiverStub = getIotTransceiver() as unknown as SinonStubbedInstance<IotTransceiver>;

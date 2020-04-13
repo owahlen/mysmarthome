@@ -1,5 +1,5 @@
 export interface IotResponse {
-    endpointId: string;
+    iotEndpointId: string;
     payload: any;
     error?:string;
 }

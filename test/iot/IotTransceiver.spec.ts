@@ -19,6 +19,7 @@ describe('IotTransceiver', () => {
     const iotEndpoint = 'test.iot.eu-west-1.amazonaws.com';
     const baseTopic = 'mysmarthome';
     const requestId = "00000000-0000-0000-0000-000000000000";
+    const iotEndpointId = 'testIotEndpointId';
     const endpointId = 'testEndpointId';
     const responseTopic = baseTopic + '/response/' + requestId;
     let device: deviceFake;
@@ -52,7 +53,7 @@ describe('IotTransceiver', () => {
             }
         };
         const iotResponse: IotResponse = {
-            endpointId,
+            iotEndpointId,
             payload: {
                 testResponsePayloadItem: "bar"
             }
@@ -65,7 +66,7 @@ describe('IotTransceiver', () => {
         // then
         expect(iotResponses.length).to.equal(1);
         const iotResponseResult = iotResponses[0];
-        expect(iotResponseResult.endpointId).to.equal(endpointId);
+        expect(iotResponseResult.iotEndpointId).to.equal(iotEndpointId);
         expect(iotResponseResult.payload).to.deep.equal(iotResponse.payload);
         iotTransceiver.end();
     });
@@ -79,7 +80,7 @@ describe('IotTransceiver', () => {
             }
         };
         const iotResponse: IotResponse = {
-            endpointId,
+            iotEndpointId,
             payload: {testResponsePayloadItem: "bar"},
             error: "testError"
         };

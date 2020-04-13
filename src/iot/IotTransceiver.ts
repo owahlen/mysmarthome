@@ -71,7 +71,7 @@ export class IotTransceiver extends IotRadio {
             const responses = new Array<IotResponse>();
             this.subscribers.set(requestId, (topic: string, iotResponse: IotResponse) => {
                 // this function is called everytime a response is received from any endpoint
-                logger.info("received response from endpoint '" + iotResponse.endpointId +
+                logger.info("received response from endpoint '" + iotResponse.iotEndpointId +
                     "' on topic '" + topic + "': " + JSON.stringify(iotResponse.payload));
                 if (iotResponse.error === undefined) {
                     responses.push(iotResponse);
@@ -82,7 +82,7 @@ export class IotTransceiver extends IotRadio {
                         resolve(responses);
                     }
                 } else {
-                    const errorMessage = "endpoint '" + iotResponse.endpointId +
+                    const errorMessage = "endpoint '" + iotResponse.iotEndpointId +
                         "' has returned error: " + iotResponse.error;
                     logger.warn(errorMessage);
                     this.subscribers.delete(requestId);

@@ -30,7 +30,7 @@ const stubIotTransmitter = () => {
 
 const stubIotTransceiver = () => {
     const testIotResponse: IotResponse = {
-        endpointId: "testEndpointId",
+        iotEndpointId: "testIotEndpointId",
         payload: {}
     }
     const iotTransceiverStub = sinon.createStubInstance(IotTransceiver);
