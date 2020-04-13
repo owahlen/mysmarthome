@@ -4,7 +4,7 @@ import {IotResponse} from "./IotResponse";
 import {IotRequest} from "./IotRequest";
 import {IotRadio} from "./IotRadio";
 
-export const RESPONSE_TIME_MS = 10000;
+export const RESPONSE_TIME_MS = 4000;
 
 /**
  * Representation of a bidirectional transceiver that works on top of aws-iot-core's pub/sub.
