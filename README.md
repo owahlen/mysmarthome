@@ -31,7 +31,9 @@
 
 ## Overview
 This project integrates _Amazon Alexa_ with a _Raspberry Pi_ in order to control home devices.
-The device used as an example is a Philips TV from 2015 that does not have an Alexa integration but at least allows to receive key press commands through a [REST API](https://github.com/eslavnov/pylips).
+The device used as an example is a _Gutmann_ cooking hook. Gutmann provides the _TZ 602_ IR remote to control the device.
+A [Irdroid USB Infrared Transceiver](https://www.irdroid.com/irdroid-usb-ir-transceiver)
+is attached to the Raspberry Pi to mimic the signals of the TS 602.
 Adapting the functionality to other devices should be straight forward.
 
 ## Architecture
@@ -41,10 +43,12 @@ Adapting the functionality to other devices should be straight forward.
 ### Alexa Skill
 In order to interact with Alexa a _skill_ needs to be created.
 There are a variety of Alexa [skill types](https://developer.amazon.com/docs/ask-overviews/understanding-the-different-types-of-skills.html).
-The _Smart Home Skill_ is best suited for controlling the TV. It has the advantage that the skill is aware of the typical voice interactions with the smart device.
-The [alexa-smarthome](https://github.com/alexa/alexa-smarthome/wiki/Build-a-Working-Smart-Home-Skill-in-15-Minutes) project explains the basics how to setup this skill type.
-Note that a _Custom Skill_ could have been used, too. However this has the disadvantage that the skill name must be mentioned in all the interactions with Alexa.
-So instead of _alexa, turn of the tv_ you will have to say _alexa, turn of the tv using my smart home_.
+The _Smart Home Skill_ has the advantage that it is aware of the typical voice interactions with a smart device.
+The [alexa-smarthome](https://github.com/alexa/alexa-smarthome/wiki/Build-a-Working-Smart-Home-Skill-in-15-Minutes) 
+project explains the basics how to setup this skill type.
+Note that a _Custom Skill_ could have been used, too.
+However, this has the disadvantage that the skill name must be mentioned in all the interactions with Alexa.
+So instead of _alexa, turn of the cooking hood_ you will have to say _alexa, turn of the cooking hood using my smart home_.
 
 From a programmers model the central component of a skill is a [AWS Lambda](https://aws.amazon.com/lambda) function that gets called by Alexa services.
 To simplify the deployment and testing of the Lambda this project uses the [AWS Serverless Application Model (SAM)](https://aws.amazon.com/serverless/sam/).
@@ -53,27 +57,27 @@ To leverage the advantages of a typed language the Lambda is written in [TypeScr
 ### Interfacing with the Raspberry Pi
 There is no way that the Alexa device can directly interact with other local devices on the home network.
 Instead it transfers voice data to the AWS cloud where it gets processed and required functions are triggered.
-This means that the Raspberry PI must somehow be reachable from the internet which raises security questions.
+This means, that the Raspberry PI must somehow be reachable from the internet which raises security questions.
 For example it is considered a bad security practice to forwarding a port from your home router to the Raspberry Pi.
 Instead [Amazon IoT core](https://aws.amazon.com/iot-core) will be used to expose a topic through an MQTT-Broker.
 The Raspberry Pi actively subscribes as a client to this topic though an encrypted channel.
-On the Raspberry Pi [Node-RED](https://nodered.org/) handles the piping of the incoming MQTT messages to the outgoing REST calls to the TV.
+On the Raspberry Pi [Node-RED](https://nodered.org/) handles the piping of the incoming MQTT messages to the Irdroid device.
 
 ### Communication flow controlling the TV via voice
 An example flow of events is shown in the following sequence diagram:
 
-![communication flow](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/control-sequence.puml)
+![communication flow](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/control-sequence.puml?version=1)
 
 ### Design Caveats
 
 #### Request/Response over Pub/Sub
-If the TV would be securely reachable by the Lambda, a conventional _HTTP request/response_ between the two
+If the smart device would be securely reachable by the Lambda, a conventional _HTTP request/response_ between the two
 would be the straight forward solution. Since IoT was used to ensure security and reachability,
 the semantics of _request/response_ must be mapped onto a _pub/sub_ system.
 As shown in the communication flow, this creates some complexity managing subscribing and publishing
 to _request topics_ and to _response topics_, each unique for every Lambda function call.
 Note that the functionality is contained in the
-[IotTransceiver](https://github.com/owahlen/mysmarthome/blob/master/src/iot/RequestResponseProtocol.ts)
+[IotTransceiver](https://github.com/owahlen/mysmarthome/blob/master/src/iot/IotTransceiver.ts)
 class of this project.
 
 #### Pub/Sub inside the Lambda
@@ -86,7 +90,7 @@ This API has the advantage that it is simple and fast.
 It however does not allow subscriptions to topics.
 Thus it is not possible to receive responses back from the TV device.
 
-In order to get feedback from the TV, the Skill Lambda therefore uses the
+In order to get feedback from the smart device, the Skill Lambda therefore uses the
 [aws-iot-device-sdk](https://docs.aws.amazon.com/iot/latest/developerguide/iot-sdks.html)
 to connect to IoT with the
 [MQTT over WebSocket protocol](https://docs.aws.amazon.com/iot/latest/developerguide/mqtt-ws.html).
@@ -197,8 +201,6 @@ Under _Account Linking_ configure the following values:
 * Client Authentication Scheme: HTTP Basic (Recommended)
 * Note down the _Alexa Redirect URLs_
 
-Under _Permissions_ enable _Send Alexa Events_ to allow the skill to respond asynchronously to Alexa directives.
-
 Now open the LWA security profile created earlier and visit the Web Settings dialog.
 Provide each of the Redirect URL values from your skill in the _Allowed Return URLs_ field.
 
@@ -283,14 +285,17 @@ In the [Alexa developer console](https://developer.amazon.com/alexa/console/ask)
 select _mysmarthome skill_ -> _Test_ -> _Alexa Simulator_.
 In the text field it is possible to type utterances and see/hear the results from Alexa.
 
-# LIRC
+# Irdroid
+Setting up Irdroid on the Raspberry PI requires the setup of a patched version of
+[lirc](https://www.irdroid.com/downloads/?did=16) available from the Irdroid website.
+The relevant config files are located in the folder [/etc](images/etc).
+The systemd [lirc.service](images/lirc.service) definition
+must be located in the folder _/lib/systemd/system/lirc.service_.
+Relevant commands for setting up lirc are:
+```
+# Use Irdroid to record the IR signals from the original TZ 602 remote 
 irrecord -d /dev/ttyACM0 TZ_602.conf
-in /etc/lirc/lircd.conf: /etc/lirc/lircd.conf.d/gutmann/TZ_602
-dmesg -Tw
-/usr/local/sbin/lircd --device=/dev/ttyACM0 --listen=8765
-irsend --address=localhost:8765 SEND_ONCE TZ_602_2 KEY_BRIGHTNESS_CYCLE
 
-# Business Objects
-Problem: several devices to be addressed
-Have one _mysmarthome skill_ that addresses n devices which in turn are driven by
-m Raspberry PIs (m<n).
+# send a lirc command
+irsend SEND_ONCE TZ_602 KEY_BRIGHTNESS_CYCLE
+```

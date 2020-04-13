@@ -1,0 +1,4 @@
+LIRC_DEVICE="/dev/ttyACM0"
+LIRC_DRIVER="usb_irtoy"
+LIRC_EXTRAOPTS=""
+LIRC_CONFIGFILE="/etc/lirc/lircd.conf"

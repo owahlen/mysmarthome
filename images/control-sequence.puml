@@ -8,7 +8,7 @@ participant "Alexa\lService" as alexa_service
 participant "Skill\lLambda" as lambda
 participant "IoT\lCore" as iot
 participant "Node\lRED" as node_red
-participant "TV" as tv
+participant "Irdroid" as irdroid
 
 == Initialization of Communication ==
 node_red -> iot: connect
@@ -22,9 +22,9 @@ node_red -> iot: subscribe to topic:\l//mysmarthome/request/+//
 iot -> node_red
 
 == Control of Device via Voice ==
-user -> echo: Alexa, lower\lthe volume\lon Philips TV
+user -> echo: Alexa, turn on cooking hood
 echo -> alexa_service
-alexa_service -> lambda: //AdjustVolume//\ldirective of\l//Alexa.StepSpeaker//\lInterface
+alexa_service -> lambda: //TurnOn//\ldirective of\l//Alexa.PowerController//\lInterface
 
 group if //Skill Lambda// is cold
 lambda -> iot: connect
@@ -38,24 +38,15 @@ iot -> lambda
 lambda -> iot: subscribe to response topics\l//mysmarthome/response/+//
 iot -> lambda
 end
-lambda -> iot: publish on request topic\l//mysmarthome/request/<uuid>//:\l//["VolumeDown","VolumeDown"]//
+lambda -> iot: publish on request topic\l//mysmarthome/request/<uuid>//:\l//TurnOn// directive
 note right
     Each request generates
     a random <uuid>.
 end note
-iot -> node_red: broadcast request message
-node_red -> tv: post\l//{"key": "VolumeDown"}//
-tv -> node_red: HTTP status code //200//
-node_red -> node_red: wait 250ms
-note left
-    rate limit of the
-    communication
-    with the TV
-end note
-node_red -> tv: post\l//{"key": "VolumeDown"}//
-tv -> node_red: HTTP status code //200//
-node_red -> iot: publish on response topic\l//mysmarthome/response/<uuid>//:\l{"status":"OK"}
-iot -> lambda: broadcast response message
+iot -> node_red: send //TurnOn// directive
+node_red -> irdroid: send //KEY_POWER//
+node_red -> iot: publish on response topic\l//mysmarthome/response/<uuid>//:\l//TurnOn// response event
+iot -> lambda: send response message
 lambda -> alexa_service: //Response// event
 alexa_service -> echo
 echo -> user: confirmation\lbeep

@@ -8,9 +8,10 @@ actor "User" as user
 package "Home Network" as home {
   node "Alexa Device\l(e.g. Echo)" as echo #white
   node "Raspberry Pi" as pi #white {
+    interface "Irdroid" as irdroid
     [Node RED] as node_red
   }
-  node "TV" as tv #white
+  node "Cooking Hood" as hood #white
 }
 
 cloud "AWS Cloud" {
@@ -19,13 +20,13 @@ cloud "AWS Cloud" {
   [IoT Core] as iot
 }
 
-user -[hidden]-> home
-pi -[hidden]-> tv
+pi -[hidden]-> hood
 user <-right-> echo : talks\lto
 echo <-right-> alexa_service: transmits\lvoice\ldata
 alexa_service -right-> lambda: function\lcall
 lambda -right-> iot: MQTT\lPub/Sub
 iot <-down-> node_red: MQTT\lPub/Sub
-node_red -right-> tv: REST\lcalls
+node_red -right-> irdroid
+irdroid -right-> hood: IR\lsignals
 
 @enduml

@@ -1,0 +1,12 @@
+[Unit]
+Description=LIRC Daemon
+After=network.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/default/lircd
+ExecStartPre=/bin/mkdir -p /run/lirc
+ExecStart=/usr/sbin/lircd -d $LIRC_DEVICE -P /run/lirc/lircd.pid -H $LIRC_DRIVER $LIRC_CONFIGFILE
+
+[Install]
+WantedBy=multi-user.target
