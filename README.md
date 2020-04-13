@@ -255,7 +255,7 @@ the Skill can be started and debugged locally.
 Run the following command to send a _Discovery.request_ event to the lambda and open a debugger port.
 Note that the function name _MySmartHomeSkill_ represents the name given to the Skill in the _template.yml_ file.
 ```
-sam local invoke -e test/requests/Discovery.request.json -d 5858 MySmartHomeSkill
+sam local invoke -e test/events/Discovery.request.json -d 5858 MySmartHomeSkill
 ```
 The debugging option _-d 5858_ can be omitted.
 If present the command waits for a debugger to connect on port 5858.
