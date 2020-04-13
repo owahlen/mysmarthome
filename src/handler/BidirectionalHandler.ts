@@ -23,31 +23,38 @@ class BidirectionalHandler extends Handler {
             payload: {directive: event.directive}
         }
         const iotTransceiver = getIotTransceiver();
-        const iotResponses: Array<IotResponse> = await iotTransceiver.get(iotRequest);
-        if (iotResponses.length !== 1) {
-            let errorMessage: string;
-            if (iotResponses.length === 0) {
-                errorMessage = "Device has sent no response for event: " + JSON.stringify(event);
-            } else {
-                errorMessage = "The event: " + JSON.stringify(event) +
-                    " has returned more than one response: " + JSON.stringify(iotResponses);
-            }
-            logger.error(errorMessage);
-            const responseOpts = {
-                name: "ErrorResponse",
-                payload: {
-                    type: "INTERNAL_ERROR",
-                    message: errorMessage
+        const iotResponsesPromise: Promise<Array<IotResponse>> = iotTransceiver.get(iotRequest);
+        return iotResponsesPromise.then((iotResponses) => {
+            if (iotResponses.length !== 1) {
+                let errorMessage: string;
+                if (iotResponses.length === 0) {
+                    errorMessage = "Device has sent no response for event: " + JSON.stringify(event);
+                } else {
+                    errorMessage = "The event: " + JSON.stringify(event) +
+                        " has returned more than one response: " + JSON.stringify(iotResponses);
                 }
-            };
-            return this.resolveResponse(new AlexaResponse(responseOpts));
-        }
-        const iotResponse = iotResponses[0];
-        const alexaResponse = new AlexaResponse({
-            event: iotResponse.payload.event,
-            context: iotResponse.payload.context
+                logger.error(errorMessage);
+                const responseOpts = {
+                    name: "ErrorResponse",
+                    payload: {
+                        type: "INTERNAL_ERROR",
+                        message: errorMessage
+                    }
+                };
+                const alexaResponse = new AlexaResponse(responseOpts);
+                logger.info("----- response -----");
+                logger.info(JSON.stringify(alexaResponse));
+                return alexaResponse;
+            }
+            const iotResponse = iotResponses[0];
+            const alexaResponse = new AlexaResponse({
+                event: iotResponse.payload.event,
+                context: iotResponse.payload.context
+            });
+            logger.info("----- response -----");
+            logger.info(JSON.stringify(alexaResponse));
+            return alexaResponse;
         });
-        return this.resolveResponse(alexaResponse);
     }
 }
 

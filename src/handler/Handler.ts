@@ -1,5 +1,4 @@
 import {AlexaResponse} from "../alexa/AlexaResponse";
-import {logger} from "../utils/logger";
 
 export abstract class Handler {
 
@@ -42,10 +41,5 @@ export abstract class Handler {
         return ((this.getCookie(event) || {}).bidiractionalDirectives || []);
     }
 
-    resolveResponse(response: AlexaResponse): Promise<AlexaResponse> {
-        logger.info("----- response -----");
-        logger.info(JSON.stringify(response));
-        return Promise.resolve(response);
-    };
 }
 

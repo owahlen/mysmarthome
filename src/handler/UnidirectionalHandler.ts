@@ -26,17 +26,20 @@ class UnidirectionalHandler extends Handler {
         const iotTransmitter = getIotTransmitter();
 
         // send the data to iot without waiting for a response
-        await iotTransmitter.send(iotRequest);
-
-        const alexaResponse = new AlexaResponse(
-            {
-                name: 'Response',
-                correlationToken,
-                token,
-                endpointId
-            }
-        );
-        return this.resolveResponse(alexaResponse);
+        const iotResponsesPromise: Promise<void> = iotTransmitter.send(iotRequest);
+        return iotResponsesPromise.then(() => {
+            const alexaResponse = new AlexaResponse(
+                {
+                    name: 'Response',
+                    correlationToken,
+                    token,
+                    endpointId
+                }
+            );
+            logger.info("----- response -----");
+            logger.info(JSON.stringify(alexaResponse));
+            return alexaResponse;
+        });
     }
 }
 
