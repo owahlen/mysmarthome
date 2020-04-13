@@ -188,7 +188,7 @@ In the AWS console find the Lambda that has just been created and note down its 
 In the skill's configuration tab enter the following values:
 * Default endpoint: ARN of the Lambda that was noted down before
 
-Under account linking configure the following values:
+Under _Account Linking_ configure the following values:
 * Authorization URI = https://www.amazon.com/ap/oa
 * Access Token URI: https://api.amazon.com/auth/o2/token
 * Your Client ID: LWA Client ID that was noted down before
@@ -196,6 +196,8 @@ Under account linking configure the following values:
 * Scope: _profile:user_id_ (click Add Scope first to add)
 * Client Authentication Scheme: HTTP Basic (Recommended)
 * Note down the _Alexa Redirect URLs_
+
+Under _Permissions_ enable _Send Alexa Events_ to allow the skill to respond asynchronously to Alexa directives.
 
 Now open the LWA security profile created earlier and visit the Web Settings dialog.
 Provide each of the Redirect URL values from your skill in the _Allowed Return URLs_ field.

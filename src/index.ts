@@ -5,6 +5,7 @@ import {logger} from "./utils/logger";
 import {AlexaResponse} from "./alexa/AlexaResponse";
 import {bidirectionalHandler} from "./handler/BidirectionalHandler";
 import {unidirectionalHandler} from "./handler/UnidirectionalHandler";
+import {authorizationHandler} from "./handler/AuthorizationHandler";
 
 AWS.config.update({region: 'eu-west-1'});
 
@@ -22,8 +23,9 @@ export const handler = async (event: any, context: any): Promise<AlexaResponse> 
     }
 
     return handlerBuilder()
-        .add(bidirectionalHandler())
+        .add(authorizationHandler())
         .add(discoveryHandler())
+        .add(bidirectionalHandler())
         .add(unidirectionalHandler())
         .build()
         (event, context);

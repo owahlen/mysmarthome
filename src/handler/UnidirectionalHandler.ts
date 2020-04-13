@@ -7,9 +7,7 @@ import {logger} from "../utils/logger";
 class UnidirectionalHandler extends Handler {
 
     canHandle(event: any, context: any): boolean {
-        const namespace = this.getNamespace(event);
-        const isBidirectional = this.isBidirectional(event);
-        return namespace !== 'Alexa.Discovery' && !isBidirectional;
+        return !this.isBidirectional(event);
     }
 
     async handle(event: any, context: any): Promise<AlexaResponse> {
