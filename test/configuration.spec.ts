@@ -23,7 +23,9 @@ afterEach(function () {
 });
 
 const stubIotTransmitter = () => {
-    volatileRadioMap.set(TRANSMITTER, sinon.createStubInstance(IotTransmitter) as unknown as IotRadio);
+    const iotTransmitterStub = sinon.createStubInstance(IotTransmitter);
+    iotTransmitterStub.send.returns(Promise.resolve());
+    volatileRadioMap.set(TRANSMITTER, iotTransmitterStub as unknown as IotRadio);
 }
 
 const stubIotTransceiver = () => {
