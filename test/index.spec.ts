@@ -15,8 +15,9 @@ chaiUse(chaiString);
 describe('index', () => {
 
     const handlerModuleNames: Array<string> = [
-        'BidirectionalHandler',
+        'AuthorizationHandler',
         'DiscoveryHandler',
+        'BidirectionalHandler',
         'UnidirectionalHandler'
     ];
 
