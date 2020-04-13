@@ -38,7 +38,7 @@ Adapting the functionality to other devices should be straight forward.
 
 ## Architecture
 
-![architecture diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/architecture.puml&version=1)
+![architecture diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/architecture.puml)
 
 ### Alexa Skill
 In order to interact with Alexa a _skill_ needs to be created.
