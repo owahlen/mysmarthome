@@ -73,15 +73,6 @@ describe('index', () => {
 
     });
 
-    it('should set callbackWaitsForEmptyEventLoop in context to false', async () => {
-        // setup
-        const context = {};
-        // when
-        const result = await handler({}, context);
-        // then
-        expect(context["callbackWaitsForEmptyEventLoop"]).to.equal(false);
-    });
-
     it('should call built handler with event and context and return its response', async () => {
         // setup
         const event = {};
