@@ -16,7 +16,7 @@ export const handler = async (event: any, context: any): Promise<AlexaResponse> 
 
     if (context !== undefined) {
         // set callbackWaitsForEmptyEventLoop to false to share connection between Lambda invocations
-        context.callbackWaitsForEmptyEventLoop = true;
+        context.callbackWaitsForEmptyEventLoop = false;
         logger.info("----- context -----");
         logger.info(JSON.stringify(context));
     }
