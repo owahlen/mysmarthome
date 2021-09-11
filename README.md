@@ -1,6 +1,6 @@
 # MySmartHome 
-[![Build Status](https://travis-ci.org/owahlen/mysmarthome.svg?branch=master)](https://travis-ci.org/owahlen/mysmarthome)
-[![Coverage Status](https://coveralls.io/repos/github/owahlen/mysmarthome/badge.svg?branch=master)](https://coveralls.io/github/owahlen/mysmarthome?branch=master)
+[![Build Status](https://travis-ci.org/owahlen/mysmarthome.svg?branch=main)](https://travis-ci.org/owahlen/mysmarthome)
+[![Coverage Status](https://coveralls.io/repos/github/owahlen/mysmarthome/badge.svg?branch=main)](https://coveralls.io/github/owahlen/mysmarthome?branch=main)
 
 ## Table of Contents
 * [Overview](#overview)
@@ -38,7 +38,7 @@ Adapting the functionality to other devices should be straight forward.
 
 ## Architecture
 
-![architecture diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/architecture.puml)
+![architecture diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/owahlen/mysmarthome/main/documentation/architecture.puml)
 
 ### Alexa Skill
 In order to interact with Alexa a _skill_ needs to be created.
@@ -66,7 +66,7 @@ On the Raspberry Pi [Node-RED](https://nodered.org/) handles the piping of the i
 ### Communication flow controlling the TV via voice
 An example flow of events is shown in the following sequence diagram:
 
-![communication flow](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/control-sequence.puml?version=1)
+![communication flow](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/main/documentation/control-sequence.puml?version=1)
 
 ### Design Caveats
 
@@ -77,7 +77,7 @@ the semantics of _request/response_ must be mapped onto a _pub/sub_ system.
 As shown in the communication flow, this creates some complexity managing subscribing and publishing
 to _request topics_ and to _response topics_, each unique for every Lambda function call.
 Note that the functionality is contained in the
-[IotTransceiver](https://github.com/owahlen/mysmarthome/blob/master/src/iot/IotTransceiver.ts)
+[IotTransceiver](https://github.com/owahlen/mysmarthome/blob/main/src/iot/IotTransceiver.ts)
 class of this project.
 
 #### Pub/Sub inside the Lambda
@@ -114,13 +114,13 @@ Finally a _Certificate_ is associated with one or more _Policies_.
 A _Policy_ contains a JSON document that describes which operations or resources
 a device can use. The following figure shows the relation between all involved items.
 
-![IoT Entity Relations](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/iot-er.puml)
+![IoT Entity Relations](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/main/documentation/iot-er.puml)
 
 Setting up IoT involves the following steps:
 * In the AWS Console select the _IoT Core_ service.
 * In the _AWS IoT_ menu click _Secure_ -> _Policies_ -> _Create_
 * Provide _RaspberryPi_ as policy name and click _Advanced mode_
-* Copy&paste the contents of this [iot policy document](https://raw.github.com/owahlen/mysmarthome/master/images/iot-policy.json) into the JSON editor
+* Copy&paste the contents of this [iot policy document](https://raw.github.com/owahlen/mysmarthome/main/documentation/iot-policy.json) into the JSON editor
 * in the _Resource_ sections of the file adjust the [AWS region](https://docs.aws.amazon.com/general/latest/gr/rande.html) and the [AWS Account ID](https://www.apn-portal.com/knowledgebase/articles/FAQ/Where-Can-I-Find-My-AWS-Account-ID) and click _Create_
 * In the _AWS IoT_ menu click _Manage_ -> _Things_ -> _Create_ -> _Create a single thing_
 * In the _Add your device to the thing registry_ dialog provide the name _RaspberryPi_ and click _Next_
@@ -209,7 +209,7 @@ After the _Login with Amazon_ is configured and the _Skill Lambda_ is deployed
 the user's account must be linked with the skill and the TV device must be discovered.
 The _Alexa_ mobile app can be used for this purpose: 
 
-![account linking and device discovery sequence](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/master/images/setup-sequence.puml)
+![account linking and device discovery sequence](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/owahlen/mysmarthome/main/documentation/setup-sequence.puml)
 
 Note that the dotted arrows indicate that the Lambda could use the Raspberry Pi to
 discover other devices in the home network.
@@ -223,9 +223,9 @@ Node-RED can then be reached with a browser under the IP-address or hostname of 
 using the URL: `http://<hostname>:1880`
 
 After downloading and importing the required
-[flow](https://raw.github.com/owahlen/mysmarthome/master/images/flows.json)
+[flow](https://raw.github.com/owahlen/mysmarthome/main/documentation/flows.json)
 the browser should show this figure:
-![Node-RED flow](https://raw.github.com/owahlen/mysmarthome/master/images/Node-RED%20flow.png)
+![Node-RED flow](https://raw.github.com/owahlen/mysmarthome/main/documentation/Node-RED%20flow.png)
 
 Before deployment, the two MQTT nodes _receive request_ and _publish response_
 need to be configured with the downloaded certificate files:
@@ -286,16 +286,27 @@ select _mysmarthome skill_ -> _Test_ -> _Alexa Simulator_.
 In the text field it is possible to type utterances and see/hear the results from Alexa.
 
 # Irdroid
-Setting up Irdroid on the Raspberry PI requires the setup of a patched version of
-[lirc](https://www.irdroid.com/downloads/?did=16) available from the Irdroid website.
-The relevant config files are located in the folder [/etc](images/etc).
-The systemd [lirc.service](images/lirc.service) definition
-must be located in the folder _/lib/systemd/system/lirc.service_.
-Relevant commands for setting up lirc are:
+The Raspberry PI uses the [lirc](https://www.lirc.org) package 
+to send infra-red signals through the Irdroid USB Infrared Transceiver.
+Execute the following commands to install the package:
 ```
-# Use Irdroid to record the IR signals from the original TZ 602 remote 
-irrecord -d /dev/ttyACM0 TZ_602.conf
+sudo apt-get update
+sudo apt-get install lirc
+```
+Note that Irdroid requires the _ir_toy_ driver.
+This driver is supported by lirc starting from version 0.9.2.
 
-# send a lirc command
-irsend SEND_ONCE TZ_602 KEY_BRIGHTNESS_CYCLE
+Several configuration files need to be copied into the [/etc](documentation/etc)
+folder on the Raspberry Pi. Afterwards restart the `lircd.service` with the command:
+```
+sudo systemctl restart lircd.service
+```
+
+Other relevant commands for setting up lirc are:
+```
+# Use Irdroid to record the infra-red signals from the original TZ 602 remote 
+irrecord -d /dev/lirc0 Gutmann-TZ602.conf
+
+# send a lirc command as infra-red signal
+irsend SEND_ONCE TZ_602 KEY_POWER
 ```
