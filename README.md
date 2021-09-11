@@ -1,5 +1,5 @@
 # MySmartHome 
-[![Build Status](https://travis-ci.org/owahlen/mysmarthome.svg?branch=main)](https://travis-ci.org/owahlen/mysmarthome)
+[![Build Status](https://travis-ci.com/owahlen/mysmarthome.svg?branch=main)](https://travis-ci.org/owahlen/mysmarthome)
 [![Coverage Status](https://coveralls.io/repos/github/owahlen/mysmarthome/badge.svg?branch=main)](https://coveralls.io/github/owahlen/mysmarthome?branch=main)
 
 ## Table of Contents
