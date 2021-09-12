@@ -1,4 +1,4 @@
-import * as uuid from "uuid";
+import { uuid } from "../utils/idGeneration";
 
 /**
  * Base class for transmitters and receivers of iot data
@@ -14,7 +14,7 @@ export class IotRadio {
     }
 
     protected createRequestId(): string {
-        return uuid.v4();
+        return uuid();
     }
 
     protected getRequestTopic(requestId: string): string {

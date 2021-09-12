@@ -1,4 +1,4 @@
-import * as uuid from "uuid";
+import { uuid } from "../utils/idGeneration";
 import {AlexaEndpoint} from "./AlexaEndpoint";
 
 /**

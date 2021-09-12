@@ -1,8 +1,7 @@
 import {expect, use as chaiUse} from "chai";
 import * as sinonChai from "sinon-chai";
 import {IotTransceiver} from "../../src/iot/IotTransceiver";
-import * as uuid from "uuid";
-import {v4} from "uuid";
+import * as idGeneration from "../../src/utils/idGeneration";
 import * as sinon from "sinon";
 import * as awsIot from "aws-iot-device-sdk";
 import {deviceFake} from "./deviceFake";
@@ -34,7 +33,7 @@ describe('IotTransceiver', () => {
             device = new deviceFake(options);
             return device;
         });
-        sandbox.stub(uuid, 'v4').callsFake(() => {
+        sandbox.stub(idGeneration, 'uuid').callsFake(() => {
             return requestId;
         });
     });
