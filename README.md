@@ -286,6 +286,8 @@ select _mysmarthome skill_ -> _Test_ -> _Alexa Simulator_.
 In the text field it is possible to type utterances and see/hear the results from Alexa.
 
 # Irdroid
+![irdroid transceiver](documentation/irdroid.png)
+
 The Raspberry PI uses the [lirc](https://www.lirc.org) package 
 to send infra-red signals through the Irdroid USB Infrared Transceiver.
 Execute the following commands to install the package:
